@@ -29,14 +29,16 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-
-
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
+//import org.firstinspires.ftc.robotcore.external.ClassFactory;
+//import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+//import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+//import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 public class HardRobot
 {
@@ -50,22 +52,22 @@ public class HardRobot
     public Servo rightClaw;
     public Servo bigAss;
     public ModernRoboticsI2cColorSensor Color;
-
-    // public static final double MID_SERVO       =  0.5 ;
-    //public static final double ARM_UP_POWER    =  0.45 ;
-    //public static final double ARM_DOWN_POWER  = -0.45 ;
+    //public VuforiaLocalizer vuforia = null;
+    //public VuforiaTrackables targets;
+    //public VuforiaTrackable target;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
 
     /* Constructor */
-    public HardRobot(){
-
+    public HardRobot()
+    {
     }
 
     /* Initialize standard Hardware interfaces */
-    public void init(HardwareMap ahwMap) {
+    public void init(HardwareMap ahwMap)
+    {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
@@ -75,9 +77,11 @@ public class HardRobot
         leftBack = hwMap.get(DcMotor.class, "leftBack");
         rightBack = hwMap.get(DcMotor.class, "rightBack");
         liftMotor = hwMap.get(DcMotor.class, "liftMotor");
+
         leftClaw = hwMap.get(Servo.class, "leftClaw");
         rightClaw = hwMap.get(Servo.class, "rightClaw");
         bigAss = hwMap.get(Servo.class, "bigAss");
+
         Color = (ModernRoboticsI2cColorSensor) hwMap.colorSensor.get("Color");
 
         leftFront.setDirection(DcMotor.Direction.REVERSE);
@@ -92,17 +96,33 @@ public class HardRobot
         rightBack.setPower(0);
         liftMotor.setPower(0);
 
-        // Set all motors to run without encoders.
-        // May want to use RUN_USING_ENCODERS if encoders are installed.
-        // leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        // rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        // leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
         // Define and initialize ALL installed servos.
-        //  leftClaw  = hwMap.get(Servo.class, "left_hand");
-        // rightClaw = hwMap.get(Servo.class, "right_hand");
-        // leftClaw.setPosition(MID_SERVO);
-        // rightClaw.setPosition(MID_SERVO);
+        leftClaw.setPosition(0.1);            // S4: Stop and close the claw.
+        rightClaw.setPosition(0.9);
+        bigAss.setPosition(0.0);
+
+        // Set all motors to run without encoders.
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        //int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId","id",hwMap.appContext.getPackageName());
+        //VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        // OR...  Do Not Activate the Camera Monitor View, to save power
+        // VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        //parameters.vuforiaLicenseKey = "AcI+TRj/////AAAAGUv8hVend0uFnM4Ru7qX3jVlRJ/McRWRQRwN8wHj00l9FqHhP+5CEKYpYNXs07Qng6Sw1ODIrS61iZiHxIye+6WAFbNYPmwo+1Lz4Dv8xyjxRofipuqYGRiPmkpMzffvDuui09EovmX26ifs74KVG5Zn7Xb6BaTS0wUadKFWlSFv73dQrDApmZGpd21bPe9Qv0Nrxhy9TN6Ztg3GQ0uoi1GRRpbTOSQ/Q9tBQJKuw17nfHZAkg+fJ3Jm33HV+DZUUNUpF6eiOFx2RL+xKOUlSLvg9c+VEZcHeY12PPl9docNYafMUJdZG2aDCASJWM6qbyjVN4OgIgOEyufTBOu5KBmejLMm/q+mE7m+2H1EVbOw";
+        //parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        //vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+        //targets = vuforia.loadTrackablesFromAsset("RelicVuMark");
+        //target = targets.get(0);
+        //target.setName("relicVuMarkTemplate");
     }
- }
+}
 
